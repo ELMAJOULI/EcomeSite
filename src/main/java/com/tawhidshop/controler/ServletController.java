@@ -19,7 +19,10 @@ public class ServletController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletPath();
         if(path.equals("/show.do")) {
-            productModel.setProducts( productDao.get(""));
+            String keyword = "";
+            if (req.getParameter("keyword") != null)
+                keyword = req.getParameter("keyword");
+            productModel.setProducts( productDao.get(keyword));
             req.setAttribute("products",productModel.getProducts());
             req.getRequestDispatcher("/WEB-INF/Views/index.jsp").forward(req, resp);
         }
