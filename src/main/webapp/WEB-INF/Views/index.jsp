@@ -15,7 +15,8 @@
                     <th>Product name</th>
                     <th>Product description</th>
                     <th>Product price</th>
-                    <th>Purchase</th>
+                    <th>Delete</th>
+                    <th>Update</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +28,7 @@
                     <td>${p.description}</td>
                     <td>${p.price}</td>
                     <td><a href="remove.do?id=${p.id}" class="btn btn-success">Drop Product</a></td>
+                    <td><a href="update.do?id=${p.id}" class="btn btn-success">Update</a></td>
                 </tr>
             </c:forEach>
             </tbody>

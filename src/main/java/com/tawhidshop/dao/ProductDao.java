@@ -87,4 +87,22 @@ public class ProductDao implements IDao<Product> {
         }
         return products;
     }
+    @Override
+    public Product get(int id) {
+        Product product ;
+        String query = "SELECT  * FROM  products WHERE id = ?";
+        try(PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+                product = new Product(resultSet.getInt("id"),resultSet.getString("title")
+                        ,resultSet.getString("description"), resultSet.getString("image")
+                        ,resultSet.getDouble("price"));
+            return product;
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+       return null;
+    }
 }

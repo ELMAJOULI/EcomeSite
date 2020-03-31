@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-@WebServlet(urlPatterns = {"/show.do","/addProduct.do","/remove.do"})
+@WebServlet(urlPatterns = {"/show.do","/addProduct.do","/remove.do","/update.do"})
 public class ServletController extends HttpServlet {
     private ProductModel productModel ;
     private ProductDao productDao ;
@@ -27,8 +27,14 @@ public class ServletController extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/Views/addProduct.jsp").forward(req, resp);
         } else if (path.equals("/remove.do")) {
             productDao.removeById(Integer.valueOf(req.getParameter("id")));
-
             resp.sendRedirect("/show.do");
+        }
+        else if (path.equals("/update.do")) {
+            int id =Integer.valueOf(req.getParameter("id")) ;
+            Product product = productDao.get(id);
+            product.setId(id);
+            req.setAttribute("p", product);
+            req.getRequestDispatcher("/WEB-INF/Views/updateProduct.jsp").forward(req,resp);
         }
 
     }
@@ -36,14 +42,21 @@ public class ServletController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Product product = new Product();
+
         product.setTitle((String) req.getParameter("title"));
         product.setDescription((String) req.getParameter("description"));
         product.setPrice( Double.valueOf(req.getParameter("price")));
         product.setImage(null);
         System.out.println(product);
-        productDao.add(product);
-        doGet(req,resp);
-
+        if(req.getServletPath().equals("/addProduct.do")){
+            productDao.add(product);
+            doGet(req,resp);
+        }
+        else if (req.getServletPath().equals("/update.do")) {
+            product.setId(Integer.valueOf(req.getParameter("id")));
+            productDao.update(product);
+            resp.sendRedirect("/show.do");
+        }
     }
 
     @Override

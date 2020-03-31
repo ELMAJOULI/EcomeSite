@@ -12,4 +12,6 @@ public interface IDao<T> {
 
     public Set<T> get(String keyWord);
 
+    public T get(int id);
+
 }
